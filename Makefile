@@ -17,13 +17,13 @@
 SOURCES := $(wildcard \
   bytefmt/*.py)
 
-all: flake test # autopep
+all: flake test pylint
 
 autopep:
 	autopep8  --max-line=120  --in-place $(SOURCES)
 
-# test:
-# 	python3 -m unittest discover -s tests/
+test:
+	python3 -m unittest discover -s tests/
 
 flake:
 	flake8 --ignore=N802 --max-line-length=120 $(SOURCES)
