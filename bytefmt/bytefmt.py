@@ -19,7 +19,7 @@ import re
 from decimal import Decimal
 
 
-styles = {
+STYLES = {
     "decimal": (1000, ["B", "kB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"]),
     "binary": (1024, ["B", "KiB", "MiB", "GiB", "TiB", "PiB", "EiB", "ZiB", "YiB"]),
     "gnu": (1024, ["", "K", "M", "G", "T", "P", "E", "Z", "Y"])
@@ -28,26 +28,26 @@ styles = {
 
 def _init_unit2factor():
     lst = {}
-    for style in styles.values():
+    for style in STYLES.values():
         base, units = style
         for i, unit in enumerate(units):
             lst[unit] = base ** i
     return lst
 
 
-unit2factor = _init_unit2factor()
+UNIT2FACTOR = _init_unit2factor()
 
 
 def dehumanize(text: str) -> int:
     """Convert a text string (e.g. "582.5MB") to a byte count. kB=1000, KiB=1024"""
 
-    m = re.match(r"^\s*([0-9]+|[0-9]*\.[0-9]+)\s*([A-Za-z]*)\s*$", text)
-    if m:
-        value, unit = m.groups()
+    match = re.match(r"^\s*([0-9]+|[0-9]*\.[0-9]+)\s*([A-Za-z]*)\s*$", text)
+    if match:
+        value, unit = match.groups()
         if unit == "":
             return int(value)
-        elif unit in unit2factor:
-            return int(Decimal(value) * unit2factor[unit])
+        elif unit in UNIT2FACTOR:
+            return int(Decimal(value) * UNIT2FACTOR[unit])
         else:
             raise Exception("unknown unit {!r} in {!r}".format(unit, text))
     else:
@@ -57,7 +57,7 @@ def dehumanize(text: str) -> int:
 def humanize(count, style="decimal", compact=False):
     """Returns size formated as a human readable string"""
 
-    base, units = styles[style]
+    base, units = STYLES[style]
     for i, unit in enumerate(units):
         if count < 1000 or i == len(units) - 1:
             fmt = "{}" if i == 0 else "{:.2f}"
