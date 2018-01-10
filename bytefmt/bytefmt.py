@@ -54,20 +54,33 @@ def dehumanize(text: str) -> int:
         raise Exception("couldn't interpret {!r}".format(text))
 
 
-def humanize(count, style="decimal", compact=False):
+def humanize(count, style="decimal", compact=False, unit=None, precision=2):
     """Returns size formated as a human readable string"""
 
     base, units = STYLES[style]
-    for i, unit in enumerate(units):
-        if count < 1000 or i == len(units) - 1:
-            fmt = "{}" if i == 0 else "{:.2f}"
-
-            if style == "gnu" or compact:
-                return (fmt + "{}").format(count, unit)
+    if unit is None:
+        for i, u in enumerate(units):
+            if count < 1000 or i == len(units) - 1:
+                count_unit = u
+                break
             else:
-                return (fmt + " {}").format(count, unit)
+                count /= base
+    else:
+        for i, u in enumerate(units):
+            if unit == u:
+                count_unit = u
+                break
+            else:
+                count /= base
         else:
-            count /= base
+            raise Exception("unit is invalid or not in the selected style: {}".format(unit))
+
+    fmt = "{}" if i == 0 else "{:." + str(precision) + "f}"
+
+    if style == "gnu" or compact:
+        return (fmt + "{}").format(count, count_unit)
+    else:
+        return (fmt + " {}").format(count, count_unit)
 
 
 # EOF #

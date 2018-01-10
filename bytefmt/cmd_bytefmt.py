@@ -38,6 +38,10 @@ def parse_args(argv):
 
     group.add_argument("-c", "--compact", action='store_true', default=False,
                         help="Don't put a space between the unit and the value")
+    group.add_argument("-u", "--unit", metavar="UNIT", type=str, default=None,
+                       help="Display the value in UNIT, don't auto detect")
+    group.add_argument("-p", "--precision", metavar="NUM", type=int, default=2,
+                       help="Display the value with NUM digits")
 
     return parser.parse_args(argv)
 
@@ -54,7 +58,10 @@ def main(argv):
     else:  # args.decimal
         style = "decimal"
 
-    print(bytefmt.humanize(byte_count, style=style, compact=args.compact))
+    print(bytefmt.humanize(byte_count, style=style,
+                           compact=args.compact,
+                           unit=args.unit,
+                           precision=args.precision))
 
 
 def main_entrypoint():
