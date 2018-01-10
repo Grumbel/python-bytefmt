@@ -25,8 +25,9 @@ setup(
     version='0.1.0',
     scripts=[],
     entry_points={
-        'console_scripts': [],
-        'gui_scripts': []
+        'console_scripts': [
+            "bytefmt = bytefmt.cmd_bytefmt:main_entrypoint"
+        ],
     },
     packages=['bytefmt']
 )

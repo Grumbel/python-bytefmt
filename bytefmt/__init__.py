@@ -15,12 +15,13 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from bytefmt.bytefmt import humanize, dehumanize
+from bytefmt.bytefmt import humanize, dehumanize, STYLES
 
 
 __all__ = [
     'humanize',
-    'dehumanize'
+    'dehumanize',
+    'STYLES'
 ]
 
 
