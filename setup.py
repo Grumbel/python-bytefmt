@@ -22,7 +22,12 @@ from setuptools import setup, find_packages
 
 setup(
     name='bytefmt',
-    version='0.1.0',
+    version='0.1.1',
+
+    author="Ingo Ruhnke",
+    author_email="grumbel@gmail.com",
+    url="https://github.com/Grumbel/bytefmt",
+
     scripts=[],
     entry_points={
         'console_scripts': [
