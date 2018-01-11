@@ -30,14 +30,14 @@ def parse_args(argv):
 
     xgroup = group.add_mutually_exclusive_group()
     xgroup.add_argument("-d", "--decimal", action='store_true', default=False,
-                       help="Use base 1000 SI units (kB, MB, GB, ...)")
+                        help="Use base 1000 SI units (kB, MB, GB, ...)")
     xgroup.add_argument("-b", "--binary", action='store_true', default=False,
-                       help="Use base 1024 units (KiB, MiB, GiB, ...)")
+                        help="Use base 1024 units (KiB, MiB, GiB, ...)")
     xgroup.add_argument("-g", "--gnu", action='store_true', default=False,
-                       help="Use base 1024 GNU-ls style (K, M, G, ...)")
+                        help="Use base 1024 GNU-ls style (K, M, G, ...)")
 
     group.add_argument("-c", "--compact", action='store_true', default=False,
-                        help="Don't put a space between the unit and the value")
+                       help="Don't put a space between the unit and the value")
     group.add_argument("-u", "--unit", metavar="UNIT", type=str, default=None,
                        help="Display the value in UNIT, don't auto detect")
     group.add_argument("-p", "--precision", metavar="NUM", type=int, default=2,
