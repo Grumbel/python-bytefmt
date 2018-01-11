@@ -17,13 +17,16 @@
 SOURCES := $(wildcard \
   bytefmt/*.py)
 
-all: flake test pylint
+all: mypy flake test pylint
 
 autopep:
 	autopep8  --max-line=120  --in-place $(SOURCES)
 
 test:
 	python3 -m unittest discover -s tests/
+
+mypy:
+	mypy --ignore-missing-imports $(SOURCES)
 
 flake:
 	flake8 --ignore=N802 --max-line-length=120 $(SOURCES)
@@ -43,6 +46,6 @@ clean:
 install:
 	sudo -H pip3 install --force-reinstall --ignore-installed --no-deps .
 
-.PHONY: all autopep flake test flake pylint clean install
+.PHONY: all autopep mypy flake test flake pylint clean install
 
 # EOF #
