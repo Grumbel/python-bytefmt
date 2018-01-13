@@ -17,6 +17,7 @@
 
 import argparse
 import sys
+import re
 
 import bytefmt
 
@@ -24,7 +25,7 @@ import bytefmt
 def parse_args(argv):
     parser = argparse.ArgumentParser(description="Format bytes human-readable")
 
-    parser.add_argument("BYTES", nargs=1)
+    parser.add_argument("BYTES", nargs='?')
 
     group = parser.add_argument_group("Formating Style")
 
@@ -46,10 +47,40 @@ def parse_args(argv):
     return parser.parse_args(argv)
 
 
+NUMBER_RX = re.compile(r'\b(\d+)\b')
+
+
+def humanize_line(line, style, args):
+    p = 0
+    result = ""
+    last_match = None
+    for match in NUMBER_RX.finditer(line):
+        result += line[p:match.start()]
+        result += bytefmt.humanize(int(match.group(1)),
+                                   style=style,
+                                   compact=args.compact,
+                                   unit=args.unit,
+                                   precision=args.precision)
+
+        last_match = match
+        p = match.end()
+
+    if last_match is None:
+        result = line
+    else:
+        result += line[last_match.end():]
+
+    return result
+
+
+def humanize_file(fin, fout, style, args):
+    for line in fin:
+        result = humanize_line(line, style, args)
+        fout.write(result)
+
+
 def main(argv):
     args = parse_args(argv[1:])
-
-    byte_count = bytefmt.dehumanize(args.BYTES[0])
 
     if args.binary:
         style = "binary"
@@ -58,10 +89,15 @@ def main(argv):
     else:  # args.decimal
         style = "decimal"
 
-    print(bytefmt.humanize(byte_count, style=style,
-                           compact=args.compact,
-                           unit=args.unit,
-                           precision=args.precision))
+    if args.BYTES is None:
+        humanize_file(sys.stdin, sys.stdout, style, args)
+    else:
+        byte_count = bytefmt.dehumanize(args.BYTES[0])
+
+        print(bytefmt.humanize(byte_count, style=style,
+                               compact=args.compact,
+                               unit=args.unit,
+                               precision=args.precision))
 
 
 def main_entrypoint():

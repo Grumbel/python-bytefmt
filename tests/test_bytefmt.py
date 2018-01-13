@@ -73,6 +73,9 @@ class ByteFmtTestCase(unittest.TestCase):
         self.assertEqual("13.59K", humanize(13916, style="gnu"))
         self.assertEqual("95.29M", humanize(99913916, style="gnu"))
 
+    def test_humanize_line(self):
+        pass
+
 
 if __name__ == '__main__':
     unittest.main()
