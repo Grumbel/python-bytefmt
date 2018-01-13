@@ -26,7 +26,7 @@ setup(
 
     author="Ingo Ruhnke",
     author_email="grumbel@gmail.com",
-    url="https://github.com/Grumbel/bytefmt",
+    url="https://github.com/Grumbel/python-bytefmt",
 
     scripts=[],
     entry_points={
