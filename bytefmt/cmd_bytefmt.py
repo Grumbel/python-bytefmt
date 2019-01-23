@@ -92,7 +92,7 @@ def main(argv):
     if args.BYTES is None:
         humanize_file(sys.stdin, sys.stdout, style, args)
     else:
-        byte_count = bytefmt.dehumanize(args.BYTES[0])
+        byte_count = bytefmt.dehumanize(args.BYTES)
 
         print(bytefmt.humanize(byte_count, style=style,
                                compact=args.compact,
