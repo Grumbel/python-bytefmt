@@ -29,13 +29,13 @@ def parse_args(argv):
 
     group = parser.add_argument_group("Formating Style")
 
-    xgroup = group.add_mutually_exclusive_group()
-    xgroup.add_argument("-d", "--decimal", action='store_true', default=False,
-                        help="Use base 1000 SI units (kB, MB, GB, ...)")
-    xgroup.add_argument("-b", "--binary", action='store_true', default=False,
-                        help="Use base 1024 units (KiB, MiB, GiB, ...)")
-    xgroup.add_argument("-g", "--gnu", action='store_true', default=False,
-                        help="Use base 1024 GNU-ls style (K, M, G, ...)")
+    style_group = group.add_mutually_exclusive_group()
+    style_group.add_argument("-d", "--decimal", action='store_const', const='decimal', dest='style',
+                             help="Use base 1000 SI units (kB, MB, GB, ...)")
+    style_group.add_argument("-b", "--binary", action='store_const', const='binary', dest='style',
+                             help="Use base 1024 units (KiB, MiB, GiB, ...)")
+    style_group.add_argument("-g", "--gnu", action='store_const', const='gnu', dest='style',
+                             help="Use base 1024 GNU-ls style (K, M, G, ...)")
 
     group.add_argument("-c", "--compact", action='store_true', default=False,
                        help="Don't put a space between the unit and the value")
@@ -79,15 +79,24 @@ def humanize_file(fin, fout, style, args):
         fout.write(result)
 
 
-def main(argv):
+def guess_style(unit: str) -> str:
+    for name, style in bytefmt.STYLES.items():
+        base, units = style
+        if unit in units:
+            return name
+    return "decimal"
+
+
+def main(argv: List[str]) -> None:
     args = parse_args(argv[1:])
 
-    if args.binary:
-        style = "binary"
-    elif args.gnu:
-        style = "gnu"
-    else:  # args.decimal
-        style = "decimal"
+    if args.style is None:
+        if args.unit is None:
+            style = "decimal"
+        else:
+            style = guess_style(args.unit)
+    else:
+        style = args.style
 
     if args.BYTES is None:
         humanize_file(sys.stdin, sys.stdout, style, args)
