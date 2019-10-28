@@ -15,6 +15,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from typing import Dict, Optional
+
 import re
 from decimal import Decimal
 
@@ -26,7 +28,7 @@ STYLES = {
 }
 
 
-def _init_unit2factor():
+def _init_unit2factor() -> Dict[str, int]:
     lst = {}
     for style in STYLES.values():
         base, units = style
@@ -54,8 +56,11 @@ def dehumanize(text: str) -> int:
         raise Exception("couldn't interpret {!r}".format(text))
 
 
-def humanize(count, style="decimal", compact=False, unit=None, precision=2):
+def humanize(byte_count: int, style: str = "decimal", compact=False,
+             unit: Optional[str] = None, precision: int = 2) -> str:
     """Returns size formated as a human readable string"""
+
+    count: float = byte_count
 
     base, units = STYLES[style]
     if unit is None:

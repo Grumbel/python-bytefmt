@@ -15,14 +15,16 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from typing import List, TextIO
+
 import argparse
-import sys
 import re
+import sys
 
 import bytefmt
 
 
-def parse_args(argv):
+def parse_args(argv: List[str]) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Format bytes human-readable")
 
     parser.add_argument("BYTES", nargs='?')
@@ -50,7 +52,7 @@ def parse_args(argv):
 NUMBER_RX = re.compile(r'\b(\d+)\b')
 
 
-def humanize_line(line, style, args):
+def humanize_line(line: str, style: str, args: argparse.Namespace) -> str:
     p = 0
     result = ""
     last_match = None
@@ -73,7 +75,7 @@ def humanize_line(line, style, args):
     return result
 
 
-def humanize_file(fin, fout, style, args):
+def humanize_file(fin: TextIO, fout: TextIO, style: str, args: argparse.Namespace) -> None:
     for line in fin:
         result = humanize_line(line, style, args)
         fout.write(result)
@@ -81,7 +83,7 @@ def humanize_file(fin, fout, style, args):
 
 def guess_style(unit: str) -> str:
     for name, style in bytefmt.STYLES.items():
-        base, units = style
+        _, units = style
         if unit in units:
             return name
     return "decimal"
@@ -109,7 +111,7 @@ def main(argv: List[str]) -> None:
                                precision=args.precision))
 
 
-def main_entrypoint():
+def main_entrypoint() -> None:
     main(sys.argv)
 
 
