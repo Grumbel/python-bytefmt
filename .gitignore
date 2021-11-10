@@ -4,3 +4,4 @@ __pycache__/
 /bytefmt.egg-info/
 /.mypy_cache/
 /dist/
+/result
