@@ -2,20 +2,19 @@
   description = "Python library to format bytes into a human readable format";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs";
-    nix.inputs.nixpkgs.follows = "nixpkgs";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-21.11";
     flake-utils.url = "github:numtide/flake-utils";
   };
 
-  outputs = { self, nix, nixpkgs, flake-utils }:
+  outputs = { self, nixpkgs, flake-utils }:
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
       in rec {
-        packages = {
-          bytefmt = pkgs.python3Packages.buildPythonPackage rec {
+        packages = flake-utils.lib.flattenTree {
+          bytefmt = pkgs.python3Packages.buildPythonPackage {
             name = "bytefmt";
-            src = self;
+            src = nixpkgs.lib.cleanSource ./.;
           };
         };
         defaultPackage = packages.bytefmt;
