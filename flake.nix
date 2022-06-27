@@ -7,16 +7,28 @@
   };
 
   outputs = { self, nixpkgs, flake-utils }:
-    flake-utils.lib.eachDefaultSystem (system:
-      let
-        pkgs = nixpkgs.legacyPackages.${system};
-      in rec {
-        packages = flake-utils.lib.flattenTree {
-          bytefmt = pkgs.python3Packages.buildPythonPackage {
+    let
+      bytefmtWithPythonPackages = (pythonPackages:
+          pythonPackages.buildPythonPackage {
             name = "bytefmt";
             src = nixpkgs.lib.cleanSource ./.;
-          };
+          }
+        );
+    in
+      {
+        lib = {
+          inherit bytefmtWithPythonPackages;
         };
-        defaultPackage = packages.bytefmt;
-      });
+      } //
+      flake-utils.lib.eachDefaultSystem (system:
+        let
+          pkgs = nixpkgs.legacyPackages.${system};
+          pythonPackages = pkgs.python3Packages;
+        in rec {
+          packages = flake-utils.lib.flattenTree rec {
+            bytefmt = bytefmtWithPythonPackages pythonPackages;
+            default = bytefmt;
+          };
+        }
+      );
 }
