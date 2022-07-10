@@ -60,7 +60,7 @@ class ByteFmtTestCase(unittest.TestCase):
         self.assertRaises(Exception, lambda: dehumanize("1MBa"))
         self.assertRaises(Exception, lambda: dehumanize("1.3.3MB"))
 
-    def test_dehumanize(self):
+    def test_humanize(self):
         self.assertEqual("13.92 kB", humanize(13916))
         self.assertEqual("99.91 MB", humanize(99913916))
 
