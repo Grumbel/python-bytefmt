@@ -24,7 +24,7 @@ from bytefmt.cmd_bytefmt import main
 
 class CmdByteFmtTestCase(unittest.TestCase):
 
-    def test_cmd_bytefmt(self):
+    def test_cmd_bytefmt(self) -> None:
         argvs = [
             (["bytefmt", "12"], "12 B\n"),
             (["bytefmt", "12MiB", "-u", "MB"], "12.58 MB\n"),

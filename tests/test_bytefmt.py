@@ -24,7 +24,7 @@ from bytefmt import dehumanize, humanize
 
 class ByteFmtTestCase(unittest.TestCase):
 
-    def test_dehumanize(self):
+    def test_dehumanize(self) -> None:
         # basic units
         self.assertEqual(1234, dehumanize("1234"))
 
@@ -60,7 +60,7 @@ class ByteFmtTestCase(unittest.TestCase):
         self.assertRaises(Exception, lambda: dehumanize("1MBa"))
         self.assertRaises(Exception, lambda: dehumanize("1.3.3MB"))
 
-    def test_humanize(self):
+    def test_humanize(self) -> None:
         self.assertEqual("13.92 kB", humanize(13916))
         self.assertEqual("99.91 MB", humanize(99913916))
 
@@ -73,7 +73,7 @@ class ByteFmtTestCase(unittest.TestCase):
         self.assertEqual("13.59K", humanize(13916, style="gnu"))
         self.assertEqual("95.29M", humanize(99913916, style="gnu"))
 
-    def test_humanize_line(self):
+    def test_humanize_line(self) -> None:
         pass
 
 
