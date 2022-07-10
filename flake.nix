@@ -12,6 +12,20 @@
           pythonPackages.buildPythonPackage {
             name = "bytefmt";
             src = nixpkgs.lib.cleanSource ./.;
+            checkInputs = (with pythonPackages; [
+              flake8
+              mypy
+              pylint
+            ]);
+            checkPhase = ''
+              runHook preCheck
+              flake8 bytefmt tests
+              # pyright bytefmt tests
+              mypy bytefmt tests
+              pylint bytefmt tests
+              python3 -m unittest discover -v -s tests/
+              runHook postCheck
+            '';
           }
         );
     in
