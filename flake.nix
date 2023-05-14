@@ -2,7 +2,7 @@
   description = "Python library to format bytes into a human readable format";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-22.05";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
   };
 
@@ -12,11 +12,13 @@
           pythonPackages.buildPythonPackage {
             name = "bytefmt";
             src = nixpkgs.lib.cleanSource ./.;
-            checkInputs = (with pythonPackages; [
+
+            nativeCheckInputs = (with pythonPackages; [
               flake8
               mypy
               pylint
             ]);
+
             checkPhase = ''
               runHook preCheck
               flake8 bytefmt tests
@@ -39,7 +41,7 @@
           pkgs = nixpkgs.legacyPackages.${system};
           pythonPackages = pkgs.python3Packages;
         in rec {
-          packages = flake-utils.lib.flattenTree rec {
+          packages = rec {
             bytefmt = bytefmtWithPythonPackages pythonPackages;
             default = bytefmt;
           };
