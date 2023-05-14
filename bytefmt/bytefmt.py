@@ -51,9 +51,9 @@ def dehumanize(text: str) -> int:
         elif unit in UNIT2FACTOR:
             return int(Decimal(value) * UNIT2FACTOR[unit])
         else:
-            raise Exception(f"unknown unit {unit!r} in {text!r}")
+            raise ValueError(f"unknown unit {unit!r} in {text!r}")
     else:
-        raise Exception(f"couldn't interpret {text!r}")
+        raise ValueError(f"couldn't interpret {text!r}")
 
 
 def humanize(byte_count: int, style: str = "decimal", compact: bool = False,
@@ -78,7 +78,7 @@ def humanize(byte_count: int, style: str = "decimal", compact: bool = False,
             else:
                 count /= base
         else:
-            raise Exception(f"unit is invalid or not in the selected style: {unit}")
+            raise ValueError(f"unit is invalid or not in the selected style: {unit}")
 
     fmt = "{}" if i == 0 else "{:." + str(precision) + "f}"
 
